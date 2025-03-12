@@ -7,9 +7,10 @@ import com.sp.user.base.repository.BaseRepository;
 import com.sp.user.shared.NullAwareBeanUtills;
 import com.sp.user.spring.data.UserContextHolder;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.*;
 
 public abstract class BaseService <E extends BaseEntity, D extends BaseDTO, P> {
@@ -131,6 +132,19 @@ public abstract P getPrimaryKey(D dto);
     protected boolean hadConflict(D dto){
         return false;
     }
+    protected boolean isBulkCreationEntytiesEnabled(){
+        return false;
+    }
+
+
+    @Modifying(flushAutomatically = true)
+    @Transactional
+    public D saveEntity(D dto, boolean isUpdateOp){
+        D dtoToReturn = null;
+        var dtoCopy= objectMapper.convertValue(dto, dClass);
+        // here we can add some code if need to
+        return _saveEntity(dto, isUpdateOp,false);
+    }
 
     protected D _saveEntity(D dto, boolean isUpdateOp, boolean ignoreExistence){
         D tempDTO = dto;
@@ -174,5 +188,11 @@ public abstract P getPrimaryKey(D dto);
     @SneakyThrows
     protected void patch(E existingDTO, D requestDto){
         nullAwareBeanUtils.copyProperties(existingDTO, requestDto);
+    }
+
+    @SneakyThrows
+    @Transactional
+    public void bulkUpload(MultipartFile file){
+
     }
 }
