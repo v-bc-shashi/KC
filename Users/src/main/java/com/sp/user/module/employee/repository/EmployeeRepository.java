@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface EmployeeRepository extends BaseRepository<EmployeeEntity, EmployeeEntity.PrimaryKey> {
-
-
+    EmployeeEntity findByEmployeeId(String employeeId);
 
 }

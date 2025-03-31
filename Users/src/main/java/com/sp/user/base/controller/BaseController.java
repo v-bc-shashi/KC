@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sp.user.base.dto.BaseDTO;
 import com.sp.user.base.entity.BaseEntity;
 import com.sp.user.base.service.BaseService;
+import com.sp.user.module.employee.utils.CommonConstants;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,21 +22,7 @@ public class BaseController<E extends BaseEntity, P, D extends BaseDTO> {
         this.service= baseService;
    }
 
-   @PostMapping()
-   public ResponseEntity<? extends  D> createEntity(@RequestBody D dto){
-       var resultDTO = this.service.saveEntity(dto, false);
-       return ResponseEntity.ok(resultDTO);
-   }
 
-    @PatchMapping
-    public ResponseEntity<?extends D> updateEntity(@RequestBody D dto){
-       var resultDto= this.service.saveEntity(dto, true);
-       return ResponseEntity.ok(resultDto);
-    }
 
-    @PostMapping
-    public ResponseEntity<?> bulkUpload(@RequestParam("file") MultipartFile file){
 
-        return ResponseEntity.ok("done");
-    }
 }

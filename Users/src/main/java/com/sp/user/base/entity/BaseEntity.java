@@ -1,6 +1,6 @@
 package com.sp.user.base.entity;
 
-import com.sp.user.shared.CommonConstants;
+import com.sp.user.module.employee.utils.CommonConstants;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;

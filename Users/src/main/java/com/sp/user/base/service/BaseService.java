@@ -4,10 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sp.user.base.dto.BaseDTO;
 import com.sp.user.base.entity.BaseEntity;
 import com.sp.user.base.repository.BaseRepository;
-import com.sp.user.shared.NullAwareBeanUtills;
+import com.sp.user.module.employee.controller.EmployeeResponse;
+import com.sp.user.module.employee.utils.CommonConstants;
+import com.sp.user.module.employee.utils.ExcelImporter;
+import com.sp.user.module.employee.utils.NullAwareBeanUtills;
 import com.sp.user.spring.data.UserContextHolder;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.util.Pair;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,44 +30,22 @@ public abstract class BaseService <E extends BaseEntity, D extends BaseDTO, P> {
     private  final Class<D> dClass;
     private  final Class<E> eClass;
     private final String entityName;
-    protected BaseService(ObjectMapper objectMapper, Class<D> dClass, Class<E> eClass, String entityName, BaseRepository<E, P> repository) {
+    protected  final ExcelImporter excelImporter;
+    protected BaseService(ObjectMapper objectMapper, Class<D> dClass, Class<E> eClass, String entityName, BaseRepository<E, P> repository, ExcelImporter excelImporter) {
         this.objectMapper = objectMapper;
         this.repository = repository;
         this.dClass = dClass;
         this.eClass = eClass;
         this.entityName = entityName;
+        this.excelImporter = excelImporter;
     }
 
-/*
-public List<D> getAllEntity(Integer pageNumber, Integer pageSize){
-        List<E> entities= new ArrayList<>();
-        var email= UserContextHolder.getUserEmail().toUpperCase();
 
-        if(this.isPaginationEnabled() ){
-            if(pageSize ==null || pageSize<=0){
-                pageSize=this.getDefaultPageSize();
-            }
+    protected Optional<E> findExistingEntity(D dto) {
+        P primaryKey = this.getPrimaryKey(dto);
+        return repository.findById(primaryKey);
+    }
 
-            if(pageNumber==null || pageNumber<0 )
-                pageNumber=0;
-        }
-
-        var pageRequest= PageRequest.of(pageNumber, pageSize);
-        var page = repository.findAll();
-
-     entities.addAll(page.);
-
-     return entities.stream()
-             .filter(this::filterEntity)
-             .sorted(Comparator.nullsFirst(Comparator.comparing(BaseEntity::getLastUpdateDate))
-             .thenComparing(Comparator.nullsFirst(Comparator.comparing(BaseEntity::getCreationDate)))
-                     .reversed())
-             .map(this::convertToDTO)
-             .map(this::generatedResponseDTO)
-             .filter(this::filterResponseDTO)
-             .toList();
-}
-*/
 
 public abstract P getPrimaryKey(D dto);
 
@@ -66,7 +54,6 @@ public abstract P getPrimaryKey(D dto);
         if(key==null){
             return false;
         }
-
         return repository.findById(key).isPresent();
     }
 
@@ -78,10 +65,7 @@ public abstract P getPrimaryKey(D dto);
         return this.objectMapper.convertValue(dto, eClass);
     }
 
-    private Optional<E> findExistingEntity(D dto){
-        P primarykey= this.getPrimaryKey(dto);
-        return repository.findById(primarykey);
-    }
+
 
 
     protected D generatedResponseDTO(D d){
@@ -136,49 +120,13 @@ public abstract P getPrimaryKey(D dto);
         return false;
     }
 
-
-    @Modifying(flushAutomatically = true)
-    @Transactional
-    public D saveEntity(D dto, boolean isUpdateOp){
-        D dtoToReturn = null;
-        var dtoCopy= objectMapper.convertValue(dto, dClass);
-        // here we can add some code if need to
-        return _saveEntity(dto, isUpdateOp,false);
+    protected D generateResponseDTO(D d) {
+        return d;
     }
 
-    protected D _saveEntity(D dto, boolean isUpdateOp, boolean ignoreExistence){
-        D tempDTO = dto;
-        E entityToSave;
-        if(isUpdateOp){
-            entityToSave= this.findExistingEntity(dto).orElse(null);
-
-            if(ignoreExistence){
-                entityToSave=this.convertToEntity(dto);
-            }
-
-            if(entityToSave.getCreationDate() != null){
-                dto.setCreationDate(entityToSave.getCreationDate());
-            }
-            this.patch(entityToSave, dto);
-         } else {
-
-           if(!ignoreExistence ){
-               if(this.hadConflict(dto) || this.doesItemExists(dto)){
-
-               }
-           }
-
-           entityToSave=this.convertToEntity(dto);
-           entityToSave.setCreationUserId(UserContextHolder.getUserEmail());
-        }
-        entityToSave.setCreationUserId(UserContextHolder.getUserEmail());
-        this.preSaveOps(dto, isUpdateOp);
-        this.preSaveOps(entityToSave, isUpdateOp, tempDTO);
-
-        var entity= repository.save(entityToSave);
-        this.postSaveOps(entity, isUpdateOp);
-        this.postSaveOps(dto, isUpdateOp);
-        return this.generatedResponseDTO(this.convertToDTO(entity));
+    @Transactional
+    public ResponseEntity<Object>  createEntity(D dto, boolean isUpdate) {
+        return EmployeeResponse.responceBuilder(CommonConstants.RECORD_CREATED_SUCCESSFULLY, HttpStatus.CREATED, this.generateResponseDTO(dto));
     }
 
    protected int getDefaultPageSize(){
@@ -190,9 +138,20 @@ public abstract P getPrimaryKey(D dto);
         nullAwareBeanUtils.copyProperties(existingDTO, requestDto);
     }
 
-    @SneakyThrows
-    @Transactional
-    public void bulkUpload(MultipartFile file){
-
+    protected List<Pair<String, String>> getExcelImportColumns() {
+        return Collections.emptyList();
     }
+    protected boolean allowBulkUpdate() {
+        return true;
+    }
+    protected final List<String> EXCLUDED = List.of(
+            "creationUserId",
+            "updateUserId",
+            "creationDate",
+            "lastUpdateDate"
+    );
+
+
+
+
 }

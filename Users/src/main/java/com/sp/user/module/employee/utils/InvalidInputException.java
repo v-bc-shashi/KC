@@ -1,4 +1,4 @@
-package com.sp.user.shared;
+package com.sp.user.module.employee.utils;
 
 import com.sp.user.base.exception.BaseHTTPException;
 import com.sp.user.base.exception.ErrorResponse;
