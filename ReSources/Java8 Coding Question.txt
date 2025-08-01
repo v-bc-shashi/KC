@@ -58,19 +58,21 @@ List<String> names = Arrays.asList("AA", "BB", "AA", "CC");
 --------------------------------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------------------------------
-
+       ********************  EMPLOYEE OBJECT ************************
 --------------------------------------------------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------------------------------------------------
+Group the Employees by city. and Count the Citywise Employees.
+  COUNT >>>   : Map<String, Long > CitiwiseEmpCount = allpersonList.stream().collect(Collectors.groupingBy(Employee::getCity, Collectors.counting()));
+ Citywise Employees >>> :  allpersonList.stream().collect(Collectors.groupingBy(Employee::getCity, Collectors.toList()));
+--------------------------------------------------------------------------------------------------------------------------
 
-                     EMPLOYEE OBJECT
---------------------------------------------------------------------------------------------------------------------------
-Group the Employees by city.
---------------------------------------------------------------------------------------------------------------------------
-Group the Employees by age.
 --------------------------------------------------------------------------------------------------------------------------
 Find the count of male and female employees present in the organization.
+Map<String, Long> maleFemales = allpersonList.stream().collect(Collectors.groupingBy(Employee::getGender, Collectors.counting()));
 --------------------------------------------------------------------------------------------------------------------------
  Get the List  of all departments in the organization.
+ Set<String> allDepratments = allpersonList.stream().collect(Collectors.mapping(Employee::getDepartment, Collectors.toSet()));
 --------------------------------------------------------------------------------------------------------------------------
 Print employee details whose age is greater than 28.
 --------------------------------------------------------------------------------------------------------------------------

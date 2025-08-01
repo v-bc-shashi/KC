@@ -1,7 +1,7 @@
 ############# Java8 Questions #################
 RERENCE - https://blog.devgenius.io/java-8-coding-and-programming-interview-questions-and-answers-62512c44f062
 
-1 ) : Given a list of integers, find out all the even numbers that exist in the list using Stream functions?
+1 ) : G iven a list of integers, find out all the even numbers that exist in the list using Stream functions?
 2 ) :  Given a list of integers, find out all the numbers starting with 1 using Stream functions?
 3 ) :  How to find duplicate elements in a given integers list in java using Stream functions?
 4 ) :  Given the list of integers, find the first element of the list using Stream functions?

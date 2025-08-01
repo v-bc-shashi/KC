@@ -17,6 +17,24 @@ private long anualSalary;
 private String country;
 private String city;
 
+    public Employee() {
+    }
+
+    public Employee(String empName, String empID, String jobTitle, String department, String businessUnit, String gender, String ethnicity, int empAge, LocalDate hireDate, long anualSalary, String country, String city) {
+        this.empName = empName;
+        this.empID = empID;
+        JobTitle = jobTitle;
+        this.department = department;
+        this.businessUnit = businessUnit;
+        this.gender = gender;
+        this.ethnicity = ethnicity;
+        this.empAge = empAge;
+        this.hireDate = hireDate;
+        this.anualSalary = anualSalary;
+        this.country = country;
+        this.city = city;
+    }
+
     public String getEmpName() {
         return empName;
     }
