@@ -16,9 +16,38 @@ import java.util.List;
 
 public class ALLEmployees {
     public static List<Employee> getALLEmployees() {
-        List employeeList = new LinkedList<Employee>();
+        List employees = new LinkedList<Employee>();
+        Random random = new Random();
+
+        String[] firstNames = {"John", "Emma", "Aarav", "Sophia", "Liam", "Olivia", "Noah", "Isabella", "Ethan", "Mia", "Raj", "Priya", "Ananya", "Vikram", "Aditi"};
+        String[] lastNames = {"Smith", "Johnson", "Patel", "Brown", "Williams", "Sharma", "Kumar", "Singh", "Davis", "Garcia"};
+        String[] departments = {"Engineering", "HR", "Finance", "Sales", "Marketing", "IT Support", "Operations", "Research"};
+        String[] jobTitles = {"Software Engineer", "Manager", "Analyst", "Director", "Consultant", "Team Lead", "Intern", "Specialist"};
+        String[] businessUnits = {"Corporate", "Retail", "Technology", "Healthcare", "Education", "Finance"};
+        String[] genders = {"Male", "Female", "Other"};
+        String[] ethnicities = {"Asian", "White", "Black", "Hispanic", "Other"};
+        String[] countries = {"USA", "India", "UK", "Canada", "Germany", "Australia"};
+        String[] cities = {"New York", "Mumbai", "London", "Toronto", "Berlin", "Sydney", "Delhi", "Chicago", "San Francisco", "Bangalore"};
+
+        for (int i = 1; i <= count; i++) {
+            String name = firstNames[random.nextInt(firstNames.length)] + " " + lastNames[random.nextInt(lastNames.length)];
+            String empID = String.format("EMP%04d", i);
+            String jobTitle = jobTitles[random.nextInt(jobTitles.length)];
+            String department = departments[random.nextInt(departments.length)];
+            String businessUnit = businessUnits[random.nextInt(businessUnits.length)];
+            String gender = genders[random.nextInt(genders.length)];
+            String ethnicity = ethnicities[random.nextInt(ethnicities.length)];
+            int age = 22 + random.nextInt(40); // age between 22–61
+            LocalDate hireDate = LocalDate.of(2005 + random.nextInt(20), 1 + random.nextInt(12), 1 + random.nextInt(28));
+            long salary = 30000 + random.nextInt(120000); // between 30k – 150k
+            String country = countries[random.nextInt(countries.length)];
+            String city = cities[random.nextInt(cities.length)];
+
+            employees.add(new Employee(name, empID, jobTitle, department, businessUnit, gender, ethnicity,
+                    age, hireDate, salary, country, city));
+        }
         //C:\Work\CJava\Amezon\AllEmployee.xlsx
-        try(FileInputStream fileInputStream = new FileInputStream(new File("C:\\AaWork\\excel\\AllEmployee.xlsx"))){
+       /* try(FileInputStream fileInputStream = new FileInputStream(new File("C:\\AaWork\\excel\\AllEmployee.xlsx"))){
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
             XSSFSheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
@@ -97,9 +126,9 @@ public class ALLEmployees {
             throw new RuntimeException(fnfExcp);
         } catch (IOException ioExcp) {
             throw new RuntimeException(ioExcp);
-        }
+        }*/
 
-        return employeeList;
+        return employees;
     }
 
 

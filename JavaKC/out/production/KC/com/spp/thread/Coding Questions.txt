@@ -1,0 +1,9 @@
+1- Write a class ThreadSafeCounter and demonstrate its usage with multiple threads incrementing and decrementing
+the counter concurrently.
+2- Write a program that counts the frequency of words in a shared ConcurrentHashMap using multiple threads.
+   Each thread processes a list of words and updates the frequency in the map. Ensure thread safety
+   and demonstrate concurrent updates.
+  like: private final ConcurrentHashMap<String, Integer> wordFrequencies = new ConcurrentHashMap<>();
+          List<String> words1 = Arrays.asList("apple", "banana", "apple", "orange");
+          List<String> words2 = Arrays.asList("banana", "apple", "grape", "banana");
+          List<String> words3 = Arrays.asList("orange", "grape", "apple", "banana");

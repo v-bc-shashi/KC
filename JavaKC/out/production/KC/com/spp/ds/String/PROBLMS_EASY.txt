@@ -1,0 +1,11 @@
+Reverse the String.
+------------------------
+Reverse the SENTENCE
+----------------------
+Pelindrom String check
+---------------------
+Find repeated character present first in a string
+example BossISsBoss  - output ill be B. not o.
+--------------------------
+
+
