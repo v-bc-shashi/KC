@@ -1,9 +1,6 @@
 package com.spp.coreJava.jdk8.excel;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,12 +10,13 @@ import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class ALLEmployees {
     public static List<Employee> getALLEmployees() {
         List employees = new LinkedList<Employee>();
         Random random = new Random();
-
+        int count=400;
         String[] firstNames = {"John", "Emma", "Aarav", "Sophia", "Liam", "Olivia", "Noah", "Isabella", "Ethan", "Mia", "Raj", "Priya", "Ananya", "Vikram", "Aditi"};
         String[] lastNames = {"Smith", "Johnson", "Patel", "Brown", "Williams", "Sharma", "Kumar", "Singh", "Davis", "Garcia"};
         String[] departments = {"Engineering", "HR", "Finance", "Sales", "Marketing", "IT Support", "Operations", "Research"};
@@ -37,7 +35,7 @@ public class ALLEmployees {
             String businessUnit = businessUnits[random.nextInt(businessUnits.length)];
             String gender = genders[random.nextInt(genders.length)];
             String ethnicity = ethnicities[random.nextInt(ethnicities.length)];
-            int age = 22 + random.nextInt(40); // age between 22–61
+            int age = 25 + random.nextInt(40); // age between 22–61
             LocalDate hireDate = LocalDate.of(2005 + random.nextInt(20), 1 + random.nextInt(12), 1 + random.nextInt(28));
             long salary = 30000 + random.nextInt(120000); // between 30k – 150k
             String country = countries[random.nextInt(countries.length)];

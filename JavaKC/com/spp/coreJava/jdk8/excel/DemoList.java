@@ -8,6 +8,7 @@ public class DemoList {
 
         List<Employee> allpersonList = ALLEmployees.getALLEmployees();
         System.out.println(allpersonList.size());
+        System.out.println(allpersonList);
 
     }
 }
